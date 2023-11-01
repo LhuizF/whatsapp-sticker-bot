@@ -1,4 +1,4 @@
-import { ICommand, IEmotesItem } from '../interfaces';
+import { ICommand } from '../interfaces';
 import { Client, Message, MessageMedia } from 'whatsapp-web.js';
 import axios from 'axios';
 

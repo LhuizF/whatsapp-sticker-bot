@@ -29,10 +29,10 @@ class SevenTVCommand implements ICommand {
     };
 
     const response = await axios
-      .post('https://api.7tv.app/v3/gql', payload)
+      .post('https://7tv.io/v3/gql', payload)
       .then((res) => res.data)
       .catch((err) => {
-        console.log('ERRRRRRR', err);
+        console.log('ERRRRRRR', err.response.data);
         throw err;
       });
 
@@ -43,13 +43,13 @@ class SevenTVCommand implements ICommand {
       return;
     }
 
-    const file = emote.host.files[this.fileNumber];
+    const file =
+      emote.host.files[this.fileNumber] ||
+      emote.host.files[emote.host.files.length - 1];
 
     const image = await MessageMedia.fromUrl(
       `https:${emote.host.url}/${file.name}`,
     );
-
-    console.log('type', image.mimetype);
 
     const media = await new MessageMedia(image.mimetype, image.data);
 
