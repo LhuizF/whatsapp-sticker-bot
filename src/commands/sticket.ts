@@ -33,7 +33,11 @@ class SticketCommand implements ICommand {
     const imageBase = Buffer.from(data).toString('base64');
     const image = await new MessageMedia('image/jpeg', imageBase, 'image.jpg');
 
-    await client.sendMessage(message.from, image, { sendMediaAsSticker: true });
+    await client.sendMessage(message.from, image, {
+      sendMediaAsSticker: true,
+      stickerAuthor: 'wa-sticker-bot:LhuizF',
+      stickerName: 'sticker',
+    });
   }
 }
 
