@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec sucrase-node src/server.ts",
-    "build": "sucrase ./src -d ./dist --transforms typescript,imports"
+    "build": "sucrase ./src -d ./build --transforms typescript,imports",
+    "start": "npm run build && node build/server.js"
   },
   "keywords": [],
   "author": "",
