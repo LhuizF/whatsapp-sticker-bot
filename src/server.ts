@@ -1,9 +1,9 @@
 import { getCommands } from './config/commands';
-import { Client, LegacySessionAuth, LocalAuth } from 'whatsapp-web.js';
+import { Client, LocalAuth } from 'whatsapp-web.js';
 import qrcode from 'qrcode-terminal';
 
 const upServer = async () => {
-    const client = new Client({
+  const client = new Client({
     authStrategy: new LocalAuth(),
   });
 
@@ -12,7 +12,7 @@ const upServer = async () => {
   });
 
   client.on('ready', () => {
-    console.log('Client is ready!');
+    console.log('ZAP ON!');
   });
 
   client.on('message', async (message) => {

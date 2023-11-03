@@ -7,39 +7,46 @@ class SevenTVByIdCommand implements ICommand {
   readonly fileNumber = 3;
 
   async handle(client: Client, message: Message): Promise<void> {
-    client.sendMessage(message.from, 'Aguarde! 6108a4bd569a3002abab0043');
+    try {
+      client.sendMessage(message.from, 'Aguarde!');
 
-    const [, emoteId] = message.body.split(' ');
+      const [, emoteId] = message.body.split(' ');
 
-    const emote = await axios
-      .get(`https://7tv.io/v3/emotes/${emoteId}`)
-      .then((res) => res.data)
-      .catch((err) => {
-        console.log('ERRO::', err.response.data);
+      const emote = await axios
+        .get(`https://7tv.io/v3/emotes/${emoteId}`)
+        .then((res) => res.data)
+        .catch((err) => {
+          console.log('ERRO::', err.response.data);
+          client.sendMessage(message.from, 'Emote não encontrado! :(');
+          throw err;
+        });
+
+      if (!emote) {
         client.sendMessage(message.from, 'Emote não encontrado! :(');
-        throw err;
+        return;
+      }
+      const validFiles = emote.host.files.filter(
+        (f: any) => f.format !== 'AVIF',
+      );
+
+      const file =
+        validFiles[this.fileNumber] || validFiles[validFiles.length - 1];
+
+      const image = await MessageMedia.fromUrl(
+        `https:${emote.host.url}/${file.name}`,
+      );
+
+      const media = await new MessageMedia(image.mimetype, image.data);
+
+      client.sendMessage(message.from, media, {
+        sendMediaAsSticker: true,
+        stickerAuthor: 'wa-sticker-bot:LhuizF',
+        stickerName: emote.name,
       });
-
-    if (!emote) {
-      client.sendMessage(message.from, 'Emote não encontrado! :(');
-      return;
+    } catch (error) {
+      console.log('CATH', error);
+      client.sendMessage(message.from, 'Ocorreu um erro');
     }
-    const validFiles = emote.host.files.filter((f) => f.format !== 'AVIF');
-
-    const file =
-      validFiles[this.fileNumber] || validFiles[validFiles.length - 1];
-
-    const image = await MessageMedia.fromUrl(
-      `https:${emote.host.url}/${file.name}`,
-    );
-
-    const media = await new MessageMedia(image.mimetype, image.data);
-
-    client.sendMessage(message.from, media, {
-      sendMediaAsSticker: true,
-      stickerAuthor: 'wa-sticker-bot:LhuizF',
-      stickerName: emote.name,
-    });
   }
 }
 
