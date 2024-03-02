@@ -87,3 +87,7 @@ app.get('/qr-code', (req, res) => {
 
   client.initialize();
 });
+
+app.get('/ping', (req, res) => {
+  res.send('pong');
+});
