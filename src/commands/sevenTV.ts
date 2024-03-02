@@ -37,6 +37,11 @@ class SevenTVCommand implements ICommand {
           throw err;
         });
 
+      if (!response.data?.emotes?.items?.length) {
+        client.sendMessage(message.from, 'Emote não encontrado! :(');
+        return;
+      }
+
       const [emote] = response.data.emotes.items as IEmotesItem[];
 
       if (!emote) {
