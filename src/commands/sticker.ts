@@ -24,15 +24,17 @@ class StickerCommand implements ICommand {
       }
       const [, url] = message.body.split(' ');
 
-      const { data } = await axios
+      const response = await axios
         .get(url.trim(), { responseType: 'arraybuffer' })
         .catch((err) => {
-          console.log('ERROR', err.response.data);
+          console.log('ERROR', err?.response?.data);
           client.sendMessage(message.from, 'Erro ao baixar imagem!');
-          throw err;
+          return null;
         });
 
-      const imageBase = Buffer.from(data).toString('base64');
+        if (!response) return;
+
+      const imageBase = Buffer.from(response.data).toString('base64');
       const image = await new MessageMedia(
         'image/jpeg',
         imageBase,

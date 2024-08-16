@@ -12,13 +12,18 @@ class SevenTVByIdCommand implements ICommand {
 
       const [, emoteId] = message.body.split(' ');
 
+      if(!emoteId) {
+        client.sendMessage(message.from, 'Faltou o ID do emote! :(');
+        return;
+      }
+
       const emote = await axios
         .get(`https://7tv.io/v3/emotes/${emoteId}`)
         .then((res) => res.data)
         .catch((err) => {
           console.log('ERRO::', err.response.data);
           client.sendMessage(message.from, 'Emote não encontrado! :(');
-          throw err;
+          return null;
         });
 
       if (!emote) {
